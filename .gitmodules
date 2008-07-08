@@ -4,3 +4,6 @@
 [submodule "vendor/extensions/radiant-language-switch"]
 	path = vendor/extensions/radiant-language-switch
 	url = git://github.com/lorenjohnson/radiant-language-switch.git
+[submodule "vendor/extensions/radiant-page-group-permissions-extension"]
+	path = vendor/extensions/radiant-page-group-permissions-extension
+	url = git://github.com/MrGossett/radiant-page-group-permissions-extension.git
