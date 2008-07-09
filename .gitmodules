@@ -1,0 +1,6 @@
+[submodule "vendor/extensions/ba"]
+	path = vendor/extensions/ba
+	url = git://github.com/aslakhellesoy/ba.git
+[submodule "vendor/plugins/webrat"]
+	path = vendor/plugins/webrat
+	url = git://github.com/brynary/webrat.git
