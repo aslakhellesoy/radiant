@@ -185,10 +185,8 @@ class Page < ActiveRecord::Base
     end
     
     def load_subclasses
-      ["#{RADIANT_ROOT}/app/models/*_page.rb", "#{RADIANT_ROOT}/vendor/extensions/*/app/models/*_page.rb"].each do |glob|
-        Dir[glob].each do |page|
-          $1.camelize.constantize if page =~ %r{/([^/]+)\.rb}
-        end
+      Dir["#{RADIANT_ROOT}/app/models/*_page.rb"].each do |page|
+        $1.camelize.constantize if page =~ %r{/([^/]+)\.rb}
       end
       unless Page.connection.tables.empty? # Haven't bootstrapped yet
         Page.connection.select_values("SELECT DISTINCT class_name FROM pages WHERE class_name <> '' AND class_name IS NOT NULL").each do |p|
