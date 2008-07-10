@@ -11,6 +11,14 @@
 
 ActiveRecord::Schema.define(:version => 21) do
 
+  create_table "attendances", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "price_id"
+  end
+
   create_table "config", :force => true do |t|
     t.string "key",   :limit => 40, :default => "", :null => false
     t.string "value",               :default => ""
@@ -44,10 +52,10 @@ ActiveRecord::Schema.define(:version => 21) do
 
   create_table "pages", :force => true do |t|
     t.string   "title"
-    t.string   "slug",          :limit => 100
-    t.string   "breadcrumb",    :limit => 160
-    t.string   "class_name",    :limit => 25
-    t.integer  "status_id",                    :default => 1,     :null => false
+    t.string   "slug",           :limit => 100
+    t.string   "breadcrumb",     :limit => 160
+    t.string   "class_name",     :limit => 25
+    t.integer  "status_id",                     :default => 1,     :null => false
     t.integer  "parent_id"
     t.integer  "layout_id"
     t.datetime "created_at"
@@ -55,10 +63,37 @@ ActiveRecord::Schema.define(:version => 21) do
     t.datetime "published_at"
     t.integer  "created_by_id"
     t.integer  "updated_by_id"
-    t.boolean  "virtual",                      :default => false, :null => false
-    t.integer  "lock_version",                 :default => 0
+    t.boolean  "virtual",                       :default => false, :null => false
+    t.integer  "lock_version",                  :default => 0
     t.string   "description"
     t.string   "keywords"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.integer  "max_attendants"
+    t.integer  "price_id"
+  end
+
+  create_table "presentations", :force => true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "presenters", :force => true do |t|
+    t.integer  "presentation_id"
+    t.integer  "attendance_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "prices", :force => true do |t|
+    t.integer  "amount"
+    t.string   "currency"
+    t.string   "code"
+    t.integer  "max"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "sessions", :force => true do |t|
@@ -67,8 +102,8 @@ ActiveRecord::Schema.define(:version => 21) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
 
   create_table "snippets", :force => true do |t|
     t.string   "name",          :limit => 100, :default => "", :null => false
