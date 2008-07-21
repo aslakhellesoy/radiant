@@ -4,8 +4,8 @@ class BasicExtension < Radiant::Extension
   url "http://test.com"
   
   define_routes do |map|
-    map.connect '/your/routing', :controller => 'basic_extension', :action => 'routing'
-    map.connect ':controller/:action'
+#    map.connect '/your/routing', :controller => 'basic_extension', :action => 'routing'
+#    map.connect ':controller/:action'
   end
   
   def activate
