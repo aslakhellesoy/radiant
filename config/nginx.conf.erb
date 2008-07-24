@@ -1,0 +1,46 @@
+upstream <%= environment %>_<%= application %> {
+  <% (mongrel_port_start...(mongrel_port_start + mongrel_server_count)).each do |port| %>
+      server 127.0.0.1:<%= port %>;
+  <% end %>
+}
+
+server {
+    listen       80;
+    server_name  <%= domain %> www.<%= domain %>;
+    root         <%= current_path %>/public;
+    index        index.html index.htm;
+
+    access_log   <%= shared_path %>/log/nginx_access.log  combined;
+    error_log    <%= shared_path %>/log/nginx_error.log;
+
+    # Capistrano maintenance state
+    if (-f $document_root/maintenance.html) {
+      rewrite ^(.*)$ /maintenance.html last;
+      break;
+    }
+
+    location / {
+        if (-f $request_filename) {
+          break;
+        }
+
+        if (-f $request_filename/index.html) {
+            rewrite (.*) $1/index.html break;
+        }
+
+        if (-f $request_filename.html) {
+            # Rails cached requests
+            rewrite (.*) $1.html break;
+        }
+
+        proxy_pass http://<%= environment %>_<%= application %>;
+        include /opt/nginx/conf/proxy.conf;
+        break;
+    }
+
+     #error_page  404              /404.html;
+     error_page   500 502 503 504  /50x.html;
+     location = /50x.html {
+         root   html;
+     }
+}
