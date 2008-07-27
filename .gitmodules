@@ -7,3 +7,6 @@
 [submodule "vendor/plugins/cucumber"]
 	path = vendor/plugins/cucumber
 	url = git://github.com/aslakhellesoy/cucumber.git
+[submodule "vendor/plugins/restful-authentication"]
+	path = vendor/plugins/restful-authentication
+	url = git://github.com/technoweenie/restful-authentication.git
