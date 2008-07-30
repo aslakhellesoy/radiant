@@ -43,6 +43,21 @@ ActiveRecord::Schema.define(:version => 21) do
     t.integer  "lock_version",                 :default => 0
   end
 
+  create_table "page_attachments", :force => true do |t|
+    t.string   "content_type"
+    t.string   "filename"
+    t.integer  "size"
+    t.integer  "parent_id"
+    t.string   "thumbnail"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at"
+    t.integer  "created_by"
+    t.datetime "updated_at"
+    t.integer  "updated_by"
+    t.integer  "page_id"
+  end
+
   create_table "page_parts", :force => true do |t|
     t.string  "name",      :limit => 100
     t.string  "filter_id", :limit => 25

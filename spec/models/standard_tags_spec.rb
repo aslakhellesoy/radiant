@@ -249,6 +249,7 @@ describe "Standard Tags" do
   end
 
   describe "<r:if_content>" do
+ 
     it "without 'part' attribute should render the contained block if the 'body' part exists" do
       page.should render('<r:if_content>true</r:if_content>').as('true')
     end
@@ -260,17 +261,62 @@ describe "Standard Tags" do
     it "should not render the contained block if the specified part does not exist" do
       page.should render('<r:if_content part="asdf">true</r:if_content>').as('')
     end
+
+    describe "with more than one part given (separated by comma)" do
+      
+      it "should render the contained block only if all specified parts exist" do
+        page(:home).should render('<r:if_content part="body, extended">true</r:if_content>').as('true')
+      end
     
-    it "should render the contained block only if all specified parts (as separated by comma) exist" do
-      page(:home).should render('<r:if_content part="body, extended">true</r:if_content>').as('true')
-    end
-    
-    it "should not render the contained block if at least one of the specified parts (as separated by comma) does not exist" do
-      page(:home).should render('<r:if_content part="body, madeup">true</r:if_content>').as('')
+      it "should not render the contained block if at least one of the specified parts does not exist" do
+        page(:home).should render('<r:if_content part="body, madeup">true</r:if_content>').as('')
+      end
+      
+      describe "with inherit attribute set to 'true'" do
+        it 'should render the contained block if the current or ancestor pages have the specified parts' do
+          page(:guests).should render('<r:if_content part="favors, extended" inherit="true">true</r:if_content>').as('true')
+        end
+      
+        it 'should not render the contained block if the current or ancestor pages do not have all of the specified parts' do
+          page(:guests).should render('<r:if_content part="favors, madeup" inherit="true">true</r:if_content>').as('')
+        end
+      end
+      describe "with inherit attribute set to 'false'" do
+        it 'should render the contained block if the current page has the specified parts' do
+          page(:guests).should render('<r:if_content part="favors, games" inherit="false">true</r:if_content>').as('')
+        end
+      
+        it 'should not render the contained block if the current or ancestor pages do not have all of the specified parts' do
+          page(:guests).should render('<r:if_content part="favors, madeup" inherit="false">true</r:if_content>').as('')
+        end
+      end
+      describe "with the 'find' attribute set to 'any'" do
+        it "should render the contained block if any of the specified parts exist" do
+          page.should render('<r:if_content part="body, asdf" find="any">true</r:if_content>').as('true')
+        end
+      end
+      describe "with the 'find' attribute set to 'all'" do
+        it "should render the contained block if all of the specified parts exist" do
+          page(:home).should render('<r:if_content part="body, sidebar" find="all">true</r:if_content>').as('true')
+        end
+        
+        it "should not render the contained block if all of the specified parts do not exist" do
+          page.should render('<r:if_content part="asdf, madeup" find="all">true</r:if_content>').as('')
+        end
+      end
     end
   end
 
   describe "<r:unless_content>" do
+    describe "with inherit attribute set to 'true'" do
+      it 'should not render the contained block if the current or ancestor pages have the specified parts' do
+        page(:guests).should render('<r:unless_content part="favors, extended" inherit="true">true</r:unless_content>').as('')
+      end
+      
+      it 'should render the contained block if the current or ancestor pages do not have the specified parts' do
+        page(:guests).should render('<r:unless_content part="madeup, imaginary" inherit="true">true</r:unless_content>').as('true')
+      end
+    end
     it "without 'part' attribute should not render the contained block if the 'body' part exists" do
       page.should render('<r:unless_content>false</r:unless_content>').as('')
     end
@@ -283,12 +329,41 @@ describe "Standard Tags" do
       page.should render('<r:unless_content part="asdf">false</r:unless_content>').as('false')
     end
     
-    it "should not render the contained block if at least one specified part (as separated by comma) exists" do
-      page(:home).should render('<r:unless_content part="body, madeup">true</r:unless_content>').as('')
-    end
+    describe "with more than one part given (separated by comma)" do
     
-    it "should render the contained block if none of the specified parts (as separated by comma) exist" do
-      page(:home).should render('<r:unless_content part="imaginary, madeup">true</r:unless_content>').as('true')
+      it "should not render the contained block if all of the specified parts exist" do
+        page(:home).should render('<r:unless_content part="body, extended">true</r:unless_content>').as('')
+      end
+    
+      it "should render the contained block if at least one of the specified parts exists" do
+        page(:home).should render('<r:unless_content part="body, madeup">true</r:unless_content>').as('true')
+      end
+      
+      describe "with the 'inherit' attribute set to 'true'" do
+        it "should render the contained block if the current or ancestor pages have none of the specified parts" do
+          page.should render('<r:unless_content part="imaginary, madeup">true</r:unless_content>').as('true')
+        end
+        
+        it "should not render the contained block if all of the specified parts are present on the current or ancestor pages" do
+          page(:party).should render('<r:unless_content part="favors, extended">true</r:unless_content>').as('')
+        end
+      end
+      
+      describe "with the 'find' attribute set to 'all'" do
+        it "should not render the contained block if all of the specified parts exist" do
+          page.should render('<r:unless_content part="body, sidebar" find="all">true</r:unless_content>').as('')
+        end
+
+        it "should render the contained block unless all of the specified parts exist" do
+          page.should render('<r:unless_content part="body, madeup" find="all">true</r:unless_content>').as('true')
+        end
+      end
+      
+      describe "with the 'find' attribute set to 'any'" do
+        it "should not render the contained block if any of the specified parts exist" do
+          page.should render('<r:unless_content part="body, madeup" find="any">true</r:unless_content>').as('')
+        end
+      end
     end
   end
 
@@ -374,7 +449,7 @@ describe "Standard Tags" do
   end
 
   describe "<r:snippet>" do
-    it "should the contents of the specified snippet" do
+    it "should render the contents of the specified snippet" do
       page.should render('<r:snippet name="first" />').as('test')
     end
 
@@ -397,6 +472,39 @@ describe "Standard Tags" do
     it "should maintain the global page when the snippet renders recursively" do
       page(:child).should render('<r:snippet name="recursive" />').as("Great GrandchildGrandchildChild")
     end
+
+    it "should render the specified snippet when called as an empty double-tag" do
+      page.should render('<r:snippet name="first"></r:snippet>').as('test')
+    end
+
+    it "should capture contents of a double tag, substituting for <r:yield/> in snippet" do
+      page.should render('<r:snippet name="yielding">inner</r:snippet>').
+        as('Before...inner...and after')
+    end
+    
+    it "should do nothing with contents of double tag when snippet doesn't yield" do
+      page.should render('<r:snippet name="first">content disappears!</r:snippet>').
+        as('test')
+    end
+
+    it "should render nested yielding snippets" do
+      page.should render('<r:snippet name="div_wrap"><r:snippet name="yielding">Hello, World!</r:snippet></r:snippet>').
+      as('<div>Before...Hello, World!...and after</div>')
+    end
+    
+    it "should render double-tag snippets called from within a snippet" do
+      page.should render('<r:snippet name="nested_yields">the content</r:snippet>').
+        as('<snippet name="div_wrap">above the content below</snippet>')
+    end
+    
+    it "should render contents each time yield is called" do
+      page.should render('<r:snippet name="yielding_often">French</r:snippet>').
+        as('French is Frencher than French')
+    end
+  end
+
+  it "should do nothing when called from page body" do
+    page.should render('<r:yield/>').as("")
   end
 
   it '<r:random> should render a randomly selected contained <r:option>' do
@@ -691,6 +799,16 @@ describe "Standard Tags" do
       page(:parent).should render(%{<r:find url="/radius"><r:if_ancestor_or_self>true</r:if_ancestor_or_self></r:find>}).as('')
     end
   end
+  
+  describe "<r:unless_ancestor_or_self>" do
+    it "should render the tag's content when the current page is not an ancestor of tag.locals.page" do
+      page(:radius).should render(%{<r:find url="/"><r:unless_ancestor_or_self>true</r:unless_ancestor_or_self></r:find>}).as('')
+    end
+
+    it "should not render the tag's content when current page is an ancestor of tag.locals.page" do
+      page(:parent).should render(%{<r:find url="/radius"><r:unless_ancestor_or_self>true</r:unless_ancestor_or_self></r:find>}).as('true')
+    end
+  end
 
   describe "<r:if_self>" do
     it "should render the tag's content when the current page is the same as the local contextual page" do
@@ -699,6 +817,16 @@ describe "Standard Tags" do
 
     it "should not render the tag's content when the current page is not the same as the local contextual page" do
       page(:radius).should render(%{<r:find url="/"><r:if_self>true</r:if_self></r:find>}).as('')
+    end
+  end
+  
+  describe "<r:unless_self>" do
+    it "should render the tag's content when the current page is not the same as the local contextual page" do
+      page(:home).should render(%{<r:find url="/"><r:unless_self>true</r:unless_self></r:find>}).as('')
+    end
+
+    it "should not render the tag's content when the current page is the same as the local contextual page" do
+      page(:radius).should render(%{<r:find url="/"><r:unless_self>true</r:unless_self></r:find>}).as('true')
     end
   end
 
