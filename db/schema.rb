@@ -12,8 +12,8 @@
 ActiveRecord::Schema.define(:version => 21) do
 
   create_table "attendances", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "page_id"
+    t.integer  "site_user_id"
+    t.integer  "happening_page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "price_id"
@@ -71,17 +71,11 @@ ActiveRecord::Schema.define(:version => 21) do
     t.datetime "ends_at"
     t.integer  "max_attendants"
     t.integer  "price_id"
-  end
-
-  create_table "presentations", :force => true do |t|
-    t.string   "title"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "program_slot"
   end
 
   create_table "presenters", :force => true do |t|
-    t.integer  "presentation_id"
+    t.integer  "presentation_page_id"
     t.integer  "attendance_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -94,6 +88,7 @@ ActiveRecord::Schema.define(:version => 21) do
     t.integer  "max"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "happening_page_id"
   end
 
   create_table "sessions", :force => true do |t|
@@ -104,6 +99,24 @@ ActiveRecord::Schema.define(:version => 21) do
 
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+
+  create_table "site_users", :force => true do |t|
+    t.string   "login",                     :limit => 40
+    t.string   "name",                      :limit => 100, :default => ""
+    t.string   "email",                     :limit => 100
+    t.string   "crypted_password",          :limit => 40
+    t.string   "salt",                      :limit => 40
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "remember_token",            :limit => 40
+    t.datetime "remember_token_expires_at"
+    t.string   "activation_code",           :limit => 40
+    t.datetime "activated_at"
+    t.string   "state",                                    :default => "passive"
+    t.datetime "deleted_at"
+  end
+
+  add_index "site_users", ["login"], :name => "index_site_users_on_login", :unique => true
 
   create_table "snippets", :force => true do |t|
     t.string   "name",          :limit => 100, :default => "", :null => false
