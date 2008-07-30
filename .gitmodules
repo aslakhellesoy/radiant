@@ -13,3 +13,9 @@
 [submodule "vendor/plugins/aasm"]
 	path = vendor/plugins/aasm
 	url = git://github.com/rubyist/aasm.git
+[submodule "vendor/extensions/page_attachments"]
+	path = vendor/extensions/page_attachments
+	url = git://github.com/radiant/radiant-page-attachments-extension.git
+[submodule "vendor/plugins/attachment_fu"]
+	path = vendor/plugins/attachment_fu
+	url = git://github.com/technoweenie/attachment_fu.git
