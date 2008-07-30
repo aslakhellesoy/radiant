@@ -5,9 +5,11 @@
 #  Add personal public key to authorized keys for deploy
 #  Create production database (remote rake db:create RAILS_ENV=production? after setup?)
 
+# Migrating new extensions:
+#  cap invoke COMMAND="cd /u/apps/staging/smidig2008/current && rake db:migrate:extensions radiant:extensions:update_all RAILS_ENV=staging"
+
 set :application, "smidig2008"
 set :use_sudo, false
-set :repository,  "git://github.com/aslakhellesoy/radiant.git"
 
 set :domain, "smidig2008.no"
 
@@ -27,10 +29,11 @@ default_run_options[:pty] = true
 
 set :scm, "git"
 set :branch, "master"
+set :scm_user, 'aslakhellesoy'
+set :repository,  "git://github.com/#{scm_user}/radiant.git"
 set :deploy_via, :remote_cache
-#set :deploy_via, :copy
-#set :git_shallow_clone, true
 set :git_enable_submodules, 1
+set :remote, scm_user
 
 set :user, 'deploy'
 set :runner, "deploy"
