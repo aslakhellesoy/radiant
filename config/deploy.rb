@@ -7,7 +7,7 @@
 
 set :application, "smidig2008"
 set :use_sudo, false
-set :repository,  "git://github.com/jhannes/radiant.git"
+set :repository,  "git://github.com/aslakhellesoy/radiant.git"
 
 set :domain, "smidig2008.no"
 
