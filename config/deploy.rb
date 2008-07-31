@@ -81,7 +81,7 @@ EOF
     run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} radiant:extensions:update_all"
   end
 end
-after "deploy:setup", "db:default"
 
-before "deploy:migrate", "db:create"
+after "deploy:setup", "db:default"
+after "deploy:migrate", "db:create"
 
