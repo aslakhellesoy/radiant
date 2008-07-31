@@ -45,8 +45,9 @@ role :web, domain
 role :db,  domain, :primary => true
 
 task :link_shared, :roles => [:app] do
-  run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml"
-  run "ln -sf #{shared_path}/public/page_attachments #{release_path}/public/page_attachments"
+  ['config/database.yml', 'config/mongrel_cluster.yml', 'config/staging_smidig2008.conf', 'public/page_attachments'].each do |f|
+    run "ln -sf #{shared_path}/#{f} #{release_path}/#{f}"
+  end
 end
 
 after "deploy:update_code", :link_shared
