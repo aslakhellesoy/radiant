@@ -5,7 +5,7 @@
 #  Add personal public key to authorized keys for deploy
 #  Create production database (remote rake db:create RAILS_ENV=production? after setup?)
 
-# Migrating new extensions:
+# After cap deploy you must ALWAYS update extension assets:
 #  cap invoke COMMAND="cd /u/apps/staging/smidig2008/current && rake db:migrate:extensions radiant:extensions:update_all RAILS_ENV=staging"
 
 set :application, "smidig2008"

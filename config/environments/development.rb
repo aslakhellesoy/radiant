@@ -16,4 +16,13 @@ config.action_view.cache_template_extensions         = false
 ResponseCache.defaults[:perform_caching]             = true
 
 # Don't care if the mailer can't send
-config.action_mailer.raise_delivery_errors = false
+# config.action_mailer.raise_delivery_errors = false
+
+# Send emails to local server - started with
+# rake radiant:extensions:ba:smtp_server
+
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+  :address => "localhost",
+  :port    => 1234
+}
