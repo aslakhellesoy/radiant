@@ -76,7 +76,7 @@ EOF
     migrate_env = fetch(:migrate_env, "")
     migrate_target = fetch(:migrate_target, :latest)
  
-    run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:create"
+    #run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:create"
     run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:migrate:extensions"
     run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} radiant:extensions:update_all"
   end
