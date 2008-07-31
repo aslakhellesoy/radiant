@@ -44,13 +44,12 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-# http://jointheconversation.org/railsgit
-# Copy  server config after updating code
-task :update_config, :roles => [:app] do
-  run "cp -Rf #{shared_path}/config/* #{release_path}/config"
+task :link_shared, :roles => [:app] do
+  run "ln -sf #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+  run "ln -sf #{shared_path}/public/page_attachments #{release_path}/public/page_attachments"
 end
 
-after "deploy:update_code", :update_config
+after "deploy:update_code", :link_shared
 
 # http://www.shanesbrain.net/2007/5/30/managing-database-yml-with-capistrano-2-0
 namespace :db do
@@ -69,7 +68,6 @@ EOF
     run "mkdir -p #{shared_path}/config" 
     put db_config, "#{shared_path}/config/database.yml" 
   end
-  
   
   task :create, :roles => :db, :only => { :primary => true } do
     rake = fetch(:rake, "rake")
