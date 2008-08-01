@@ -116,7 +116,6 @@ ActiveRecord::Schema.define(:version => 21) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
 
   create_table "site_users", :force => true do |t|
-    t.string   "login",                     :limit => 40
     t.string   "name",                      :limit => 100, :default => ""
     t.string   "email",                     :limit => 100
     t.string   "crypted_password",          :limit => 40
@@ -130,8 +129,6 @@ ActiveRecord::Schema.define(:version => 21) do
     t.string   "state",                                    :default => "passive"
     t.datetime "deleted_at"
   end
-
-  add_index "site_users", ["login"], :name => "index_site_users_on_login", :unique => true
 
   create_table "snippets", :force => true do |t|
     t.string   "name",          :limit => 100, :default => "", :null => false
