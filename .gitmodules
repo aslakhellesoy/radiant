@@ -19,3 +19,6 @@
 [submodule "vendor/plugins/attachment_fu"]
 	path = vendor/plugins/attachment_fu
 	url = git://github.com/technoweenie/attachment_fu.git
+[submodule "vendor/extensions/copy_move"]
+	path = vendor/extensions/copy_move
+	url = git://github.com/pilu/radiant-copy-move.git
