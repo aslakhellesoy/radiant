@@ -7,7 +7,6 @@
 
 set :application, "radiant"
 set :use_sudo, false
-set :repository,  "git://github.com/jhannes/radiant.git"
 
 set :domain, "smidig2008.no"
 
@@ -27,10 +26,11 @@ default_run_options[:pty] = true
 
 set :scm, "git"
 set :branch, "master"
+set :scm_user, 'aslakhellesoy'
+set :repository,  "git://github.com/#{scm_user}/radiant.git"
 set :deploy_via, :remote_cache
-#set :deploy_via, :copy
-#set :git_shallow_clone, true
 set :git_enable_submodules, 1
+set :remote, scm_user
 
 set :user, 'deploy'
 set :runner, "deploy"
@@ -41,13 +41,13 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-# http://jointheconversation.org/railsgit
-# Copy  server config after updating code
-task :update_config, :roles => [:app] do
-  run "cp -Rf #{shared_path}/config/* #{release_path}/config"
+task :link_shared, :roles => [:app] do
+  ['config/database.yml', 'config/mongrel_cluster.yml', 'config/staging_smidig2008.conf', 'public/page_attachments'].each do |f|
+    run "ln -sf #{shared_path}/#{f} #{release_path}/#{f}"
+  end
 end
 
-after "deploy:update_code", :update_config
+after "deploy:update_code", :link_shared
 
 # http://www.shanesbrain.net/2007/5/30/managing-database-yml-with-capistrano-2-0
 namespace :db do
@@ -67,19 +67,17 @@ EOF
     put db_config, "#{shared_path}/config/database.yml" 
   end
   
-  
   task :create, :roles => :db, :only => { :primary => true } do
     rake = fetch(:rake, "rake")
     rails_env = fetch(:rails_env, environment)
     migrate_env = fetch(:migrate_env, "")
-    migrate_target = fetch(:migrate_target, :latest)
  
-    run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:create"
-    run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:migrate:extensions"
+    # The MIGRATING var is used in Ba records in some places
+    run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} RADIANT_BA_MIGRATING=true db:migrate:extensions"
     run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} radiant:extensions:update_all"
   end
 end
-after "deploy:setup", "db:default"
 
-before "deploy:migrate", "db:create"
+after "deploy:setup", "db:default"
+after "deploy:migrate", "db:create"
 

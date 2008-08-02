@@ -7,3 +7,21 @@
 [submodule "vendor/plugins/cucumber"]
 	path = vendor/plugins/cucumber
 	url = git://github.com/aslakhellesoy/cucumber.git
+[submodule "vendor/plugins/restful-authentication"]
+	path = vendor/plugins/restful-authentication
+	url = git://github.com/technoweenie/restful-authentication.git
+[submodule "vendor/plugins/aasm"]
+	path = vendor/plugins/aasm
+	url = git://github.com/rubyist/aasm.git
+[submodule "vendor/extensions/page_attachments"]
+	path = vendor/extensions/page_attachments
+	url = git://github.com/radiant/radiant-page-attachments-extension.git
+[submodule "vendor/plugins/attachment_fu"]
+	path = vendor/plugins/attachment_fu
+	url = git://github.com/technoweenie/attachment_fu.git
+[submodule "vendor/extensions/copy_move"]
+	path = vendor/extensions/copy_move
+	url = git://github.com/pilu/radiant-copy-move.git
+[submodule "vendor/extensions/reorder"]
+	path = vendor/extensions/reorder
+	url = git://github.com/radiant/radiant-reorder-extension.git
