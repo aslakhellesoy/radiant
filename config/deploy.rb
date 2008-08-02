@@ -5,7 +5,7 @@
 #  Add personal public key to authorized keys for deploy
 #  Create production database (remote rake db:create RAILS_ENV=production? after setup?)
 
-set :application, "smidig2008"
+set :application, "radiant"
 set :use_sudo, false
 set :repository,  "git://github.com/jhannes/radiant.git"
 
