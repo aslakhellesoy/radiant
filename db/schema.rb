@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 21) do
     t.integer  "max_attendants"
     t.integer  "price_id"
     t.string   "program_slot"
+    t.integer  "position"
   end
 
   create_table "presenters", :force => true do |t|
