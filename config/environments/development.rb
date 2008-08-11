@@ -21,8 +21,9 @@ ResponseCache.defaults[:perform_caching]             = true
 # Send emails to local server - started with
 # rake radiant:extensions:ba:smtp_server
 
-ActionMailer::Base.delivery_method = :smtp
-ActionMailer::Base.smtp_settings = {
-  :address => "localhost",
-  :port    => 1234
-}
+ActionMailer::Base.delivery_method = :test
+# ActionMailer::Base.delivery_method = :smtp
+# ActionMailer::Base.smtp_settings = {
+#   :address => "localhost",
+#   :port    => 1234
+# }

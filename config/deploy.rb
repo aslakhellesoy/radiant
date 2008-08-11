@@ -73,7 +73,7 @@ EOF
     migrate_env = fetch(:migrate_env, "")
  
     # The MIGRATING var is used in Ba records in some places
-    run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} RADIANT_BA_MIGRATING=true db:migrate:extensions"
+    run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:migrate:extensions"
     run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} radiant:extensions:update_all"
   end
 end
