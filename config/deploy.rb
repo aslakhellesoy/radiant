@@ -47,7 +47,8 @@ task :link_shared, :roles => [:app] do
   end
 
   rake = fetch(:rake, "rake")
-  run "cd #{current_path}; #{rake} radiant:extensions:update_all"
+  rails_env = fetch(:rails_env, environment)
+  run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} radiant:extensions:update_all"
 end
 
 after "deploy:update_code", :link_shared
