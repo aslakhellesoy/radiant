@@ -45,9 +45,14 @@ task :link_shared, :roles => [:app] do
   ['config/database.yml', 'config/mongrel_cluster.yml', 'config/staging_smidig2008.conf', 'public/page_attachments'].each do |f|
     run "ln -sf #{shared_path}/#{f} #{release_path}/#{f}"
   end
+
+  rake = fetch(:rake, "rake")
+  run "cd #{current_path}; #{rake} radiant:extensions:update_all"
 end
 
 after "deploy:update_code", :link_shared
+after "deploy:setup", "db:default"
+after "deploy:migrate", "db:migrate_extensions"
 
 # http://www.shanesbrain.net/2007/5/30/managing-database-yml-with-capistrano-2-0
 namespace :db do
@@ -67,17 +72,12 @@ EOF
     put db_config, "#{shared_path}/config/database.yml" 
   end
   
-  task :create, :roles => :db, :only => { :primary => true } do
+  task :migrate_extensions, :roles => :db, :only => { :primary => true } do
     rake = fetch(:rake, "rake")
     rails_env = fetch(:rails_env, environment)
     migrate_env = fetch(:migrate_env, "")
  
-    # The MIGRATING var is used in Ba records in some places
     run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} db:migrate:extensions"
-    run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} #{migrate_env} radiant:extensions:update_all"
   end
 end
-
-after "deploy:setup", "db:default"
-after "deploy:migrate", "db:create"
 
