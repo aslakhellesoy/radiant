@@ -41,7 +41,7 @@ role :app, domain
 role :web, domain
 role :db,  domain, :primary => true
 
-task :link_shared, :roles => [:app] do
+task :link_shared_and_update_extensions, :roles => [:app] do
   ['config/database.yml', 'config/mongrel_cluster.yml', 'config/staging_smidig2008.conf', 'public/page_attachments'].each do |f|
     run "ln -sf #{shared_path}/#{f} #{release_path}/#{f}"
   end
@@ -51,7 +51,7 @@ task :link_shared, :roles => [:app] do
   run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} radiant:extensions:update_all"
 end
 
-after "deploy:update_code", :link_shared
+after "deploy", :link_shared_and_update_extensions
 after "deploy:setup", "db:default"
 after "deploy:migrate", "db:migrate_extensions"
 
