@@ -51,7 +51,7 @@ task :link_shared_and_update_extensions, :roles => [:app] do
   run "cd #{current_path}; #{rake} RAILS_ENV=#{rails_env} radiant:extensions:update_all"
 end
 
-after "deploy", :link_shared_and_update_extensions
+before "deploy:restart", :link_shared_and_update_extensions
 after "deploy:setup", "db:default"
 after "deploy:migrate", "db:migrate_extensions"
 
