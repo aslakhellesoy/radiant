@@ -31,9 +31,14 @@ module Radiant
 
       def activate_extension
         return if instance.active?
-        instance.activate if instance.respond_to? :activate
-        ActionController::Routing::Routes.reload
-        instance.active = true
+        begin
+          instance.activate if instance.respond_to? :activate
+          ActionController::Routing::Routes.reload
+          instance.active = true
+        rescue => e
+          # Some extensions fail during bootstrapping. That's usually ok.
+          STDERR.puts("WARNING: #{e.message} (You may ignore this if you are running rake db:bootstrap. You may be using a bootstrap-brittle extension...)")
+        end
       end
       alias :activate :activate_extension
 

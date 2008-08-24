@@ -9,9 +9,14 @@ module Radiant
     end
   
     def draw_with_plugin_routes
-      draw_without_plugin_routes do |mapper|
-        add_extension_routes(mapper)
-        yield mapper
+      begin
+        draw_without_plugin_routes do |mapper|
+          add_extension_routes(mapper)
+          yield mapper
+        end
+      rescue => e
+        # Some extensions fail during bootstrapping. That's usually ok.
+        STDERR.puts("WARNING: #{e.message} (You may ignore this if you are running rake db:bootstrap. You may be using a bootstrap-brittle extension...)")
       end
     end
 
