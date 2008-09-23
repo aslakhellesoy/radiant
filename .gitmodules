@@ -3,7 +3,7 @@
 	url = git://github.com/aslakhellesoy/ba.git
 [submodule "vendor/plugins/webrat"]
 	path = vendor/plugins/webrat
-	url = git://github.com/brynary/webrat.git
+	url = git://github.com/aslakhellesoy/webrat.git
 [submodule "vendor/plugins/cucumber"]
 	path = vendor/plugins/cucumber
 	url = git://github.com/aslakhellesoy/cucumber.git
@@ -28,3 +28,6 @@
 [submodule "vendor/extensions/tags"]
 	path = vendor/extensions/tags
 	url = git://github.com/aslakhellesoy/radiant-tags-extension.git
+[submodule "vendor/plugins/integration_upload_plugin"]
+	path = vendor/plugins/integration_upload_plugin
+	url = git://github.com/rubyredrick/integration_upload_plugin.git
