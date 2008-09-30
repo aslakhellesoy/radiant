@@ -31,3 +31,6 @@
 [submodule "vendor/plugins/integration_upload_plugin"]
 	path = vendor/plugins/integration_upload_plugin
 	url = git://github.com/rubyredrick/integration_upload_plugin.git
+[submodule "vendor/extensions/links_manager"]
+	path = vendor/extensions/links_manager
+	url = git://github.com/lacostej/radiant-linksmanager-extension.git
