@@ -94,9 +94,11 @@ function fadeOut(node, hover, fadeSpeed){
             );
           }
         }else{
-          node.hover(
-            function(){node.attr('src', hoverImg)},
-            function(){node.attr('src', orgImg)}
+          node.dblclick(
+            function(){ 
+              node.attr('src', hoverImg);
+              node.animate({opacity: 0.0 }, opt.fadeSpeed);
+            }
           );
         }
 			});
